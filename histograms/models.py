@@ -459,6 +459,8 @@ class LumisectionHistogram2D(LumisectionHistogramBase):
             # the last chunk may have less lines than expected
             histogram_data_file.entries_processed = num_lines_read
             histogram_data_file.save()  # Save entries and move to next chunk
+            
+            del lumisection_histos2D
 
             # User can decide up to which chunk to read
             if read_chunk_num_max >= current_chunk:
@@ -568,6 +570,8 @@ class LumisectionHistogram2D(LumisectionHistogramBase):
             # Make sure that the number of processed entries is 1D + 2D hists combined.
             histogram_data_file.entries_processed += len(created)
             histogram_data_file.save()
+
+            del lumisection_histos2D
 
             current_lumi += 1
             if read_chunk_lumi >= current_lumi:
