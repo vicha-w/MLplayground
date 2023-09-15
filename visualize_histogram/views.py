@@ -56,13 +56,15 @@ def visualize_histogram(request, runnr, lumisection, title_sanitised):
         lumi2d_searchresults = LumisectionHistogram2D.objects.filter(title=title, lumisection=target_lumi)
         if len(lumi1d_searchresults) == 1: 
             histobj = lumi1d_searchresults[0]
+            hist_xmin_safe = histobj.x_min if histobj.x_min else 0
+            hist_xmax_safe = histobj.x_max if histobj.x_max else histobj.x_bin
             return render(
                 request,
                 "visualize_histogram/visualize_histogram.html",
                 {
                     "data": histobj.data,
                     "is2d": False,
-                    "bins": np.linspace(histobj.x_min, histobj.x_max, histobj.x_bin+1).tolist(), 
+                    "bins": np.linspace(hist_xmin_safe, hist_xmax_safe, histobj.x_bin+1).tolist(), 
                     "title": histobj.title,
                     "runnr": target_lumi.run_id,
                     "lumisection": target_lumi.ls_number,
@@ -71,14 +73,18 @@ def visualize_histogram(request, runnr, lumisection, title_sanitised):
             )
         elif len(lumi2d_searchresults) == 1: 
             histobj = lumi2d_searchresults[0]
+            hist_xmin_safe = histobj.x_min if histobj.x_min else 0
+            hist_xmax_safe = histobj.x_max if histobj.x_max else histobj.x_bin
+            hist_ymin_safe = histobj.y_min if histobj.y_min else 0
+            hist_ymax_safe = histobj.y_max if histobj.y_max else histobj.y_bin
             return render(
                 request,
                 "visualize_histogram/visualize_histogram.html",
                 {
                     "data": histobj.data,
                     "is2d": True,
-                    "xbins": np.linspace(histobj.x_min, histobj.x_max, histobj.x_bin+1).tolist(), 
-                    "ybins": np.linspace(histobj.y_min, histobj.y_max, histobj.y_bin+1).tolist(), 
+                    "xbins": np.linspace(hist_xmin_safe, hist_xmax_safe, histobj.x_bin+1).tolist(), 
+                    "ybins": np.linspace(hist_ymin_safe, hist_ymax_safe, histobj.y_bin+1).tolist(), 
                     "title": histobj.title,
                     "runnr": target_lumi.run_id,
                     "lumisection": target_lumi.ls_number,
