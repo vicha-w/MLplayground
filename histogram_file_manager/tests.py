@@ -12,7 +12,7 @@ class HistogramDataFileTestCase(TestCase):
         self.all_files = []
         all_dirs = settings.DIR_PATH_DQMIO_STORAGE.split(":")
 
-        for _ in all_dirs:
+        for dir in all_dirs:
             for root, _, files in sorted(os.walk(dir)):
                 for f in sorted(files):
                     self.all_files.append(os.path.join(root, f))
